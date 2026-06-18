@@ -127,22 +127,6 @@ class Plugin_Lockdown_WP
 	}
 
 
-	// /**
-	//  * Add admin menu page
-	//  */
-	// public function add_plugin_menu_page()
-	// {
-	// 	add_menu_page(
-	// 		'Plugin Lockdown WP',
-	// 		'Plugin Lockdown',
-	// 		'manage_options',
-	// 		'plugin-lockdown-wp',
-	// 		array($this, 'render_plugin_settings_page'),
-	// 		'dashicons-lock',
-	// 		30
-	// 	);
-	// }
-
 	/**
 	 * Disable installs and updates
 	 */
