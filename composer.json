@@ -1,0 +1,24 @@
+{
+  "name": "abbeymaniak/plugin-lockdown-wp",
+  "description": "Plugin Lockdown Wp allows you to control access to plugin features based on user roles.",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Abiodun Paul Ogunnaike",
+      "email": "ayo_ogunnaike@yahoo.com",
+      "homepage": "https://digital.celebrateme.io"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Abbeymaniak\\PluginLockdownWp\\": "includes/"
+    }
+  },
+  "require-dev": {
+    "wp-cli/i18n-command": "^2"
+  },
+  "scripts": {
+    "makepot": "wp i18n make-pot ."
+  }
+}
