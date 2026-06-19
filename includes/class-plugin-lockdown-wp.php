@@ -20,16 +20,13 @@ class Plugin_Lockdown_WP
 	// Constructor
 	public function __construct()
 	{
-		// add_action('admin_menu', array($this, 'add_plugin_menu_page'));
-
 		$this->options = get_option('plugin_lockdown_options', []);
 
+		var_dump(print_r(wp_get_current_user(), true));
 
-
-		// if (get_option('plugin_lockdown_all') === 'on') {
-
-		// 	add_action('init', [$this, 'apply_rules']);
-		// }
+		if ($this->options['total_lockdown'] === true) {
+			$this->apply_rules();
+		}
 	}
 
 
@@ -84,18 +81,20 @@ class Plugin_Lockdown_WP
 	{
 
 		// TOTAL LOCKDOWN
-		if (!empty($this->options['total_lockdown'])) {
+		if ($this->options['total_lockdown'] === true) {
 			$this->lock_all();
+			$this->block_installs();
+			$this->hide_plugins_menu();
 			return;
 		}
 
 		// Block installs only
-		if (!empty($this->options['block_installs'])) {
+		if ($this->options['block_installs'] === true) {
 			$this->block_installs();
 		}
 
 		// Hide plugins menu
-		if (!empty($this->options['hide_plugins_menu'])) {
+		if ($this->options['hide_plugins_menu'] === true) {
 			$this->hide_plugins_menu();
 		}
 	}
@@ -119,10 +118,12 @@ class Plugin_Lockdown_WP
 	 */
 	private function hide_plugins_menu()
 	{
-		// Optional: hide plugins menu
+		//hide plugins menu
 		add_action('admin_menu', function () {
-			remove_menu_page('plugins.php');
-			remove_submenu_page('plugins.php', 'plugin-install.php');
+			if (!current_user_can('activate_plugins')) {
+				remove_menu_page('plugins.php');
+				remove_submenu_page('plugins.php', 'plugin-install.php');
+			}
 		}, 999);
 	}
 

@@ -44,4 +44,10 @@ class Plugin_Lockdown_Admin_UI
 		$options = get_option('plugin_lockdown_options', []);
 		include PLUGIN_LOCKDOWN_PATH . 'templates/settings-page.php';
 	}
+
+
+	public function plugin_lockdown_settings_page_before_extra_content()
+	{
+		echo '<p>Plugin Lockdown extra content</p>';
+	}
 }
