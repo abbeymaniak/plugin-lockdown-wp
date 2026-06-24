@@ -68,6 +68,17 @@ class Plugin_Lockdown_WP
 		return 'production';
 	}
 
+	/**
+	 * Exempt Plugin Lockdown itself
+	 */
+	private function is_exempt_plugin()
+	{
+
+		$plugin = $_REQUEST['plugin'] ?? '';
+
+		return $plugin === PLUGIN_LOCKDOWN_BASENAME;
+	}
+
 
 	/**
 	 * Lock plugin and theme modifications
@@ -101,7 +112,7 @@ class Plugin_Lockdown_WP
 	{
 		// Extra safety: block install capability
 		add_filter('map_meta_cap', function ($caps, $cap) {
-			if (in_array($cap, ['install_plugins', 'update_plugins', 'delete_plugins', 'install_themes', 'update_themes'])) {
+			if (in_array($cap, ['install_plugins', 'update_plugins', 'delete_plugins', 'install_themes', 'update_themes']) && !$this->is_exempt_plugin()) {
 				$caps[] = 'do_not_allow';
 			}
 			return $caps;
@@ -111,7 +122,7 @@ class Plugin_Lockdown_WP
 	/**
 	 * Hide plugins menu
 	 */
-	public function hide_plugins_menu()
+	private function hide_plugins_menu()
 	{
 
 		if ((int) $this->options['hide_plugins_menu'] === 1) {
@@ -128,8 +139,49 @@ class Plugin_Lockdown_WP
 	private function lock_all()
 	{
 		// Disable installs/updates
-		if (!defined('DISALLOW_FILE_MODS')) {
+		if (!defined('DISALLOW_FILE_MODS') && !$this->is_exempt_plugin()) {
 			define('DISALLOW_FILE_MODS', true);
 		}
+
+		add_filter(
+			'map_meta_cap',
+			[$this, 'total_lockdown_capabilities'],
+			10,
+			2
+		);
+	}
+
+	/**
+	 * Total lockdown capabilities
+	 */
+	public function total_lockdown_capabilities(
+		$caps,
+		$cap
+	) {
+
+		if ($this->is_exempt_plugin()) {
+			return $caps;
+		}
+
+		$blocked = [
+
+			'install_plugins',
+			'update_plugins',
+			'delete_plugins',
+
+			'activate_plugins',
+			'deactivate_plugins',
+
+			'install_themes',
+			'update_themes',
+			'delete_themes'
+
+		];
+
+		if (in_array($cap, $blocked)) {
+			return ['do_not_allow'];
+		}
+
+		return $caps;
 	}
 }
