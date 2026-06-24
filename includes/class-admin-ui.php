@@ -7,6 +7,7 @@ class Plugin_Lockdown_Admin_UI
 
 	public function __construct()
 	{
+
 		add_action('admin_menu', [$this, 'menu']);
 		add_action('admin_enqueue_scripts', [$this, 'assets']);
 	}
@@ -25,18 +26,22 @@ class Plugin_Lockdown_Admin_UI
 
 	public function assets()
 	{
+		if (isset($_GET['page']) && $_GET['page'] === 'plugin-lockdown') {
 
-		wp_enqueue_script(
-			'plugin-lockdown-admin',
-			plugin_dir_url(__FILE__) . 'assets/admin.js',
-			array('jquery'),
-			'1.0.0',
-			true
-		);
-		wp_enqueue_style(
-			'plugin-lockdown-admin',
-			plugin_dir_url(__FILE__) . 'admin.css'
-		);
+			wp_enqueue_script(
+				'plugin-lockdown-admin',
+				PLUGIN_LOCKDOWN_JS,
+				array('jquery'),
+				'1.0.0',
+				true
+			);
+			wp_enqueue_style(
+				'plugin-lockdown-admin',
+				PLUGIN_LOCKDOWN_CSS,
+				array(),
+				"1.0.0"
+			);
+		}
 	}
 
 	public function render()

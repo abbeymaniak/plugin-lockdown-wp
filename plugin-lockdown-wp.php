@@ -4,6 +4,7 @@ namespace Abbeymaniak\PluginLockdownWP;
 
 use Abbeymaniak\PluginLockdownWp\Plugin_Lockdown_WP;
 use Abbeymaniak\PluginLockdownWp\Plugin_Lockdown_Settings;
+use Abbeymaniak\PluginLockdownWp\Plugin_Lockdown_Admin_UI;
 
 
 /**
@@ -35,15 +36,19 @@ use Abbeymaniak\PluginLockdownWp\Plugin_Lockdown_Settings;
 // If the file is accessed directly abort script.
 defined('ABSPATH') || die('Unauthorized Access');
 
+
+// define constants
 define('PLUGIN_LOCKDOWN_PATH', plugin_dir_path(__FILE__));
+define('PLUGIN_LOCKDOWN_URL', plugin_dir_url(__FILE__));
+define('PLUGIN_LOCKDOWN_CSS', PLUGIN_LOCKDOWN_URL . 'assets/admin.css');
+define('PLUGIN_LOCKDOWN_JS', PLUGIN_LOCKDOWN_URL . 'assets/admin.js');
 
 // Include the main plugin class.
 require_once PLUGIN_LOCKDOWN_PATH . 'includes/class-plugin-lockdown-wp.php';
 require_once PLUGIN_LOCKDOWN_PATH . 'includes/class-settings.php';
-require_once PLUGIN_LOCKDOWN_PATH . 'admin/class-admin-ui.php';
+require_once PLUGIN_LOCKDOWN_PATH . 'includes/class-admin-ui.php';
 
 //instantiate the main class
-
 add_action('plugins_loaded', function () {
 	new Plugin_Lockdown_WP();
 	new Plugin_Lockdown_Settings();

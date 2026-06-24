@@ -21,12 +21,7 @@ class Plugin_Lockdown_WP
 	public function __construct()
 	{
 		$this->options = get_option('plugin_lockdown_options', []);
-
-		var_dump(print_r(wp_get_current_user(), true));
-
-		if ($this->options['total_lockdown'] === true) {
-			$this->apply_rules();
-		}
+		add_action('admin_init', [$this, 'apply_rules']);
 	}
 
 
@@ -77,24 +72,24 @@ class Plugin_Lockdown_WP
 	/**
 	 * Lock plugin and theme modifications
 	 */
-	private function apply_rules()
+	public function apply_rules()
 	{
-
+		echo "aspply_rules";
+		print_r($this->options);
 		// TOTAL LOCKDOWN
-		if ($this->options['total_lockdown'] === true) {
+		if ((int) $this->options['total_lockdown'] === 1) {
 			$this->lock_all();
 			$this->block_installs();
 			$this->hide_plugins_menu();
-			return;
 		}
 
 		// Block installs only
-		if ($this->options['block_installs'] === true) {
+		if ((int) $this->options['block_installs'] === 1) {
 			$this->block_installs();
 		}
 
 		// Hide plugins menu
-		if ($this->options['hide_plugins_menu'] === true) {
+		if ((int) $this->options['hide_plugins_menu'] === 1) {
 			$this->hide_plugins_menu();
 		}
 	}
@@ -116,15 +111,13 @@ class Plugin_Lockdown_WP
 	/**
 	 * Hide plugins menu
 	 */
-	private function hide_plugins_menu()
+	public function hide_plugins_menu()
 	{
-		//hide plugins menu
-		add_action('admin_menu', function () {
-			if (!current_user_can('activate_plugins')) {
-				remove_menu_page('plugins.php');
-				remove_submenu_page('plugins.php', 'plugin-install.php');
-			}
-		}, 999);
+
+		if ((int) $this->options['hide_plugins_menu'] === 1) {
+			remove_menu_page('plugins.php');
+			remove_submenu_page('plugins.php', 'plugin-install.php');
+		}
 	}
 
 
