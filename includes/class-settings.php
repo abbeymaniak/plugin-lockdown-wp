@@ -62,6 +62,30 @@ class Plugin_Lockdown_Settings
 		);
 
 		add_settings_field(
+			'prevent_plugins_activation',
+			'Restrict Plugins Activation',
+			[$this, 'prevent_plugins_activation_callback'],
+			'plugin_lockdown',
+			'plugin_lockdown_general_section'
+		);
+
+		add_settings_field(
+			'prevent_plugins_deactivation',
+			'Restrict Plugins Deactivation',
+			[$this, 'prevent_plugins_deactivation_callback'],
+			'plugin_lockdown',
+			'plugin_lockdown_general_section'
+		);
+
+		add_settings_field(
+			'prevent_plugins_updates',
+			'Restrict Plugins Updates',
+			[$this, 'prevent_plugins_updates_callback'],
+			'plugin_lockdown',
+			'plugin_lockdown_general_section'
+		);
+
+		add_settings_field(
 			'production_only',
 			'Production Only',
 			array($this, 'production_only_callback'),
@@ -93,6 +117,18 @@ class Plugin_Lockdown_Settings
 			$new_input['hide_plugins_menu'] = sanitize_text_field($input['hide_plugins_menu']);
 		} else {
 			$new_input['hide_plugins_menu'] = 0;
+		}
+
+		if (isset($input['prevent_plugins_activation'])) {
+			$new_input['prevent_plugins_activation'] = sanitize_text_field($input['prevent_plugins_activation']);
+		} else {
+			$new_input['prevent_plugins_activation'] = 0;
+		}
+
+		if (isset($input['prevent_plugins_deactivation'])) {
+			$new_input['prevent_plugins_deactivation'] = sanitize_text_field($input['prevent_plugins_deactivation']);
+		} else {
+			$new_input['prevent_plugins_deactivation'] = 0;
 		}
 
 		if (isset($input['production_only'])) {
@@ -158,6 +194,60 @@ class Plugin_Lockdown_Settings
 			<span style=" color: #d63638; font-weight: bold;">Hide Plugins Menu</span>
 		</label>
 		<p class="description" style="font-size: .8rem;">Completely hide the plugins menu for all users.</p>
+	<?php
+	}
+
+	/**
+	 * Prevent plugins activations callback
+	 */
+
+	public function prevent_plugins_activation_callback()
+	{
+
+		$options = get_option('plugin_lockdown_options');
+		$prevent_plugins_activation_checked = isset($options['prevent_plugins_activation']) ? $options['prevent_plugins_activation'] : 0;
+	?>
+		<label>
+			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_activation]" value="1" <?php checked($prevent_plugins_activation_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;">Restrict Plugins Activation</span>
+		</label>
+		<p class="description" style="font-size: .8rem;">Completely disable all plugin activations for users.</p>
+	<?php
+	}
+
+	/**
+	 * Prevent plugins deactivations callback
+	 */
+
+	public function prevent_plugins_deactivation_callback()
+	{
+
+		$options = get_option('plugin_lockdown_options');
+		$prevent_plugins_deactivation_checked = isset($options['prevent_plugins_deactivation']) ? $options['prevent_plugins_deactivation'] : 0;
+	?>
+		<label>
+			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_deactivation]" value="1" <?php checked($prevent_plugins_deactivation_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;">Restrict Plugins Deactivation</span>
+		</label>
+		<p class="description" style="font-size: .8rem;">Completely disable all plugin deactivations for users.</p>
+	<?php
+	}
+
+	/**
+	 * Prevent plugins updates callback
+	 */
+
+	public function prevent_plugins_updates_callback()
+	{
+
+		$options = get_option('plugin_lockdown_options');
+		$prevent_plugins_updates_checked = isset($options['prevent_plugins_updates']) ? $options['prevent_plugins_updates'] : 0;
+	?>
+		<label>
+			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_updates]" value="1" <?php checked($prevent_plugins_updates_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;">Restrict Plugins Updates</span>
+		</label>
+		<p class="description" style="font-size: .8rem;">Completely disable all plugin updates for users.</p>
 	<?php
 	}
 

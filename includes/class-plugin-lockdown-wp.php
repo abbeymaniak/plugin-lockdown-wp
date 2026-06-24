@@ -103,6 +103,21 @@ class Plugin_Lockdown_WP
 		if ((int) $this->options['hide_plugins_menu'] === 1) {
 			$this->hide_plugins_menu();
 		}
+
+		//prevent plugin activations
+		if ((int) $this->options['prevent_plugins_activation'] === 1) {
+			$this->prevent_plugins_activation();
+		}
+
+		//prevent plugin deactivations
+		if ((int) $this->options['prevent_plugins_deactivation'] === 1) {
+			$this->prevent_plugins_deactivation();
+		}
+
+		//prevent plugins update
+		if ((int) $this->options['prevent_plugins_updates'] === 1) {
+			$this->prevent_plugins_updates();
+		}
 	}
 
 	/**
@@ -183,5 +198,71 @@ class Plugin_Lockdown_WP
 		}
 
 		return $caps;
+	}
+
+	/**
+	 *
+	 * Prevent plugins activation
+	 * @return void
+	 */
+	private function prevent_plugins_activation()
+	{
+
+		add_filter(
+			'map_meta_cap',
+			function ($caps, $cap, $user_id, $args) {
+
+				$plugins = $_POST['plugins'] ?? '';
+				if ($cap === 'activate_plugins' && !$this->is_exempt_plugin()) {
+					$caps[] = 'do_not_allow';
+				}
+				return $caps;
+			},
+			10,
+			4
+		);
+	}
+
+
+	/**
+	 *
+	 * Prevent Plugins deactivation
+	 * @return void
+	 */
+	private function prevent_plugins_deactivation()
+	{
+
+		add_filter('map_meta_cap', function ($caps, $cap, $user_id, $args) {
+
+			if ($cap === 'deactivate_plugins' && !$this->is_exempt_plugin()) {
+				$caps[] = 'do_not_allow';
+			}
+			return $caps;
+		}, 10, 4);
+	}
+
+	/**
+	 * Prevent plugin updates
+	 *
+	 */
+	private function prevent_plugins_updates()
+	{
+
+		add_filter(
+			'map_meta_cap',
+			function ($caps, $cap) {
+
+				if (
+					$cap === 'update_plugins'
+					&& !$this->is_exempt_plugin()
+				) {
+					$caps[] = 'do_not_allow';
+				}
+
+				return $caps;
+			},
+			10,
+			2
+		);
 	}
 }
