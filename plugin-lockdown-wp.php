@@ -40,6 +40,7 @@ defined('ABSPATH') || die('Unauthorized Access');
 // define constants
 define('PLUGIN_LOCKDOWN_PATH', plugin_dir_path(__FILE__));
 define('PLUGIN_LOCKDOWN_URL', plugin_dir_url(__FILE__));
+define('PLUGIN_LOCKDOWN_BASENAME', plugin_basename(__FILE__));
 define('PLUGIN_LOCKDOWN_CSS', PLUGIN_LOCKDOWN_URL . 'assets/admin.css');
 define('PLUGIN_LOCKDOWN_JS', PLUGIN_LOCKDOWN_URL . 'assets/admin.js');
 
