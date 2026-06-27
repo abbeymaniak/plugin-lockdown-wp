@@ -85,7 +85,7 @@ class Plugin_Lockdown_WP
 	 */
 	public function apply_rules()
 	{
-		echo "aspply_rules";
+		echo "apply_rules <br>";
 		print_r($this->options);
 		// TOTAL LOCKDOWN
 		if ((int) $this->options['total_lockdown'] === 1) {

@@ -11,6 +11,11 @@ class Plugin_Lockdown_Settings
 		add_action('admin_init', [$this, 'register_settings']);
 	}
 
+	/**
+	 *
+	 * Register settings.
+	 * @return void
+	 */
 	public function register_settings()
 	{
 
@@ -24,7 +29,10 @@ class Plugin_Lockdown_Settings
 					'total_lockdown' => 0,
 					'block_installs' => 0,
 					'hide_plugins_menu' => 0,
-					'production_only' => 1
+					'production_only' => 0,
+					'prevent_plugins_activation' => 0,
+					'prevent_plugins_deactivation' => 0,
+					'prevent_plugins_updates' => 0
 				),
 			)
 		);
@@ -129,6 +137,12 @@ class Plugin_Lockdown_Settings
 			$new_input['prevent_plugins_deactivation'] = sanitize_text_field($input['prevent_plugins_deactivation']);
 		} else {
 			$new_input['prevent_plugins_deactivation'] = 0;
+		}
+
+		if (isset($input['prevent_plugins_updates'])) {
+			$new_input['prevent_plugins_updates'] = sanitize_text_field($input['prevent_plugins_updates']);
+		} else {
+			$new_input['prevent_plugins_updates'] = 0;
 		}
 
 		if (isset($input['production_only'])) {

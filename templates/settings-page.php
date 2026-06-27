@@ -2,9 +2,9 @@
 	<h1><i class="dashicons dashicons-shield"></i> Plugin Lockdown</h1>
 </div>
 <?php
-// $options = get_option('plugin_lockdown_options');
-// print_r($options);
-print_r(PLUGIN_LOCKDOWN_BASENAME);
+$options = get_option('plugin_lockdown_options');
+print_r($options);
+// print_r(PLUGIN_LOCKDOWN_BASENAME);
 ?>
 <div class="container">
 	<input type="radio" name="option" id="1" checked>
