@@ -173,9 +173,9 @@ class Plugin_Lockdown_Settings
 ?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[block_installs]" value="1" <?php checked($block_installs_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Block Installs</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Block Installs', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Completely disable all plugin installs for users.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin installs for users.', 'plugin_lockdown_wp'); ?></p>
 	<?php
 	}
 	/**
@@ -189,9 +189,9 @@ class Plugin_Lockdown_Settings
 	?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[total_lockdown]" value="1" <?php checked($total_lockdown_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Enable total lockdown</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Enable total lockdown', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Completely disable all plugin/theme installs, updates, and deletions for all users. Replaces all other settings when enabled.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin/theme installs, updates, and deletions for all users. Replaces all other settings when enabled.', 'plugin_lockdown_wp'); ?></p>
 	<?php
 	}
 
@@ -205,9 +205,9 @@ class Plugin_Lockdown_Settings
 	?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[hide_plugins_menu]" value="1" <?php checked($hide_plugins_menu_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Hide Plugins Menu</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Hide Plugins Menu', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Completely hide the plugins menu for all users.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Completely hide the plugins menu for all users.', 'plugin_lockdown_wp'); ?></p>
 	<?php
 	}
 
@@ -223,9 +223,9 @@ class Plugin_Lockdown_Settings
 	?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_activation]" value="1" <?php checked($prevent_plugins_activation_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Restrict Plugins Activation</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Restrict Plugins Activation', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Completely disable all plugin activations for users.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin activations for users.', 'plugin_lockdown_wp'); ?></p>
 	<?php
 	}
 
@@ -241,9 +241,9 @@ class Plugin_Lockdown_Settings
 	?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_deactivation]" value="1" <?php checked($prevent_plugins_deactivation_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Restrict Plugins Deactivation</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Restrict Plugins Deactivation', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Completely disable all plugin deactivations for users.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin deactivations for users.', 'plugin_lockdown_wp'); ?></p>
 	<?php
 	}
 
@@ -259,9 +259,9 @@ class Plugin_Lockdown_Settings
 	?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_updates]" value="1" <?php checked($prevent_plugins_updates_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Restrict Plugins Updates</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Restrict Plugins Updates', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Completely disable all plugin updates for users.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin updates for users.', 'plugin_lockdown_wp'); ?></p>
 	<?php
 	}
 
@@ -275,9 +275,9 @@ class Plugin_Lockdown_Settings
 	?>
 		<label>
 			<input type="checkbox" name="plugin_lockdown_options[production_only]" value="1" <?php checked($production_only_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;">Production Only</span>
+			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Production Only', 'plugin_lockdown_wp'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;">Only apply lockdown settings on production sites.</p>
+		<p class="description" style="font-size: .8rem;"><?php echo __('Only apply lockdown settings on production sites.', 'plugin_lockdown_wp'); ?></p>
 <?php
 	}
 }

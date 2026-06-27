@@ -11,7 +11,7 @@ print_r($options);
 	<label for="1">
 		<div class="tab-name">
 			<i class="dashicons dashicons-dashboard"></i>
-			<span>General</span>
+			<span><?php echo __('Global Lockdown', 'plugin_lockdown_wp'); ?></span>
 		</div>
 		<div class="tab-content">
 
@@ -30,19 +30,10 @@ print_r($options);
 	<label for="2">
 		<div class="tab-name">
 			<i class="dashicons dashicons-dashboard"></i>
-			<span>Settings</span>
+			<span><?php echo __('Advanced Settings', 'plugin_lockdown_wp'); ?></span>
 		</div>
 		<div class="tab-content">
 			<h1>Settings</h1>
 		</div>
 	</label>
 </div>
-<form method="POST" action="options.php">
-
-
-	<!-- <?php
-			settings_fields('plugin_lockdown_group');
-			do_settings_sections('plugin_lockdown');
-			submit_button('Save Settings');
-			?> -->
-</form>
