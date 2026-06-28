@@ -111,3 +111,142 @@ input:checked + label .tab-content {
 	z-index: 1;
 	transition: 0.5s;
 }
+
+/* ============================================================
+   Advanced Settings — Coming Soon Feature Cards
+   ============================================================ */
+
+.plw-advanced-tab {
+	width: 100%;
+	min-width: 560px;
+	padding: 28px 24px 20px;
+	box-sizing: border-box;
+}
+
+/* Header */
+.plw-coming-soon-header {
+	text-align: center;
+	margin-bottom: 28px;
+}
+
+.plw-rocket {
+	font-size: 40px;
+	display: block;
+	margin-bottom: 6px;
+	animation: plw-float 3s ease-in-out infinite;
+}
+
+@keyframes plw-float {
+	0%, 100% { transform: translateY(0); }
+	50%       { transform: translateY(-8px); }
+}
+
+.plw-coming-soon-header h2 {
+	margin: 0 0 6px;
+	font-size: 22px;
+	font-weight: 700;
+	color: #1d2327;
+}
+
+.plw-coming-soon-sub {
+	margin: 0;
+	font-size: 13px;
+	color: #646970;
+}
+
+/* Features grid */
+.plw-features-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 14px;
+	margin-bottom: 24px;
+}
+
+/* Feature card */
+.plw-feature-card {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	background: #f6f7f7;
+	border: 1px solid #e0e0e0;
+	border-radius: 10px;
+	padding: 16px 16px 14px;
+	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+	overflow: hidden;
+}
+
+.plw-feature-card::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(135deg, rgba(34, 113, 177, 0.06) 0%, transparent 60%);
+	pointer-events: none;
+}
+
+.plw-feature-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 6px 20px rgba(34, 113, 177, 0.14);
+	border-color: #2271b1;
+}
+
+/* Icon */
+.plw-feature-icon {
+	font-size: 28px;
+	line-height: 1;
+	display: flex;
+	align-items: center;
+}
+
+/* Card body text */
+.plw-feature-body h3 {
+	margin: 0 0 4px;
+	font-size: 14px;
+	font-weight: 600;
+	color: #1d2327;
+}
+
+.plw-feature-body p {
+	margin: 0;
+	font-size: 12px;
+	color: #646970;
+	line-height: 1.55;
+}
+
+/* Badge */
+.plw-badge {
+	display: inline-block;
+	align-self: flex-start;
+	font-size: 10px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 0.6px;
+	border-radius: 20px;
+	padding: 3px 10px;
+}
+
+.plw-badge--soon {
+	background: linear-gradient(90deg, #f0a500, #f5c518);
+	color: #1d2327;
+	box-shadow: 0 2px 6px rgba(240, 165, 0, 0.35);
+}
+
+/* Footer */
+.plw-coming-soon-footer {
+	text-align: center;
+	font-size: 12.5px;
+	color: #646970;
+	margin: 0;
+	padding-top: 12px;
+	border-top: 1px solid #e0e0e0;
+}
+
+.plw-coming-soon-footer a {
+	color: #2271b1;
+	text-decoration: none;
+	font-weight: 600;
+}
+
+.plw-coming-soon-footer a:hover {
+	text-decoration: underline;
+}
