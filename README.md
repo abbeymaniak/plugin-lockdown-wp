@@ -1,5 +1,10 @@
 # Plugin Lockdown WP
 
+<div align="center">
+  <img src="assets/image/banner-1544_x_500.png" alt="Plugin Lockdown WP Banner">
+</div>
+
+
 ![WordPress Plugin Version](https://img.shields.io/github/v/release/abbeymaniak/plugin-lockdown-wp?label=Version)
 ![Requires PHP](https://img.shields.io/badge/PHP-8.1+-blue.svg)
 ![Requires WP](https://img.shields.io/badge/WordPress-6.0+-blue.svg)
