@@ -52,6 +52,17 @@ require_once PLUGIN_LOCKDOWN_PATH . 'includes/class-admin-ui.php';
 // On activation, auto-capture the activating user as exempt.
 // Registered at top-level (not inside hooks) per WP lifecycle requirements.
 register_activation_hook(__FILE__, function () {
+	// Ensure the user has administrative privileges (allow WP-CLI to bypass).
+	if (!defined('WP_CLI') || !WP_CLI) {
+		if (!current_user_can('activate_plugins') || (!current_user_can('manage_options') && !is_super_admin())) {
+			wp_die(
+				esc_html__('Sorry, you must be an administrator or super administrator to install and activate this plugin.', 'plugin-lockdown-wp'),
+				esc_html__('Permission Denied', 'plugin-lockdown-wp'),
+				['back_link' => true]
+			);
+		}
+	}
+
 	$options         = get_option('plugin_lockdown_options', []);
 	$current_user_id = get_current_user_id();
 
