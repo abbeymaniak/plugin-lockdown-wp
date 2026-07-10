@@ -26,13 +26,14 @@ class Plugin_Lockdown_Settings
 				'type'              => 'array',
 				'sanitize_callback' => array($this, 'sanitize_options'),
 				'default'           => array(
-					'total_lockdown' => 0,
-					'block_installs' => 0,
-					'hide_plugins_menu' => 0,
-					'production_only' => 0,
-					'prevent_plugins_activation' => 0,
+					'total_lockdown'               => 0,
+					'block_installs'               => 0,
+					'hide_plugins_menu'            => 0,
+					'production_only'              => 0,
+					'prevent_plugins_activation'   => 0,
 					'prevent_plugins_deactivation' => 0,
-					'prevent_plugins_updates' => 0
+					'prevent_plugins_updates'      => 0,
+					'exempt_users'                 => [],
 				),
 			)
 		);
@@ -100,6 +101,14 @@ class Plugin_Lockdown_Settings
 			'plugin_lockdown',
 			'plugin_lockdown_general_section'
 		);
+
+		add_settings_field(
+			'exempt_users',
+			'Exempt Users',
+			[$this, 'exempt_users_callback'],
+			'plugin_lockdown',
+			'plugin_lockdown_general_section'
+		);
 	}
 
 	/**
@@ -149,6 +158,33 @@ class Plugin_Lockdown_Settings
 			$new_input['production_only'] = sanitize_text_field($input['production_only']);
 		} else {
 			$new_input['production_only'] = 0;
+		}
+
+		// Sanitize exempt users — prevent removing the last exempt user.
+		if (isset($input['exempt_users']) && is_array($input['exempt_users'])) {
+			$new_exempt = array_map('intval', $input['exempt_users']);
+			$new_exempt = array_filter($new_exempt, function ($id) {
+				return $id > 0;
+			});
+			$new_exempt = array_values($new_exempt);
+
+			if (empty($new_exempt)) {
+				// Cannot remove the last user — keep current value.
+				$existing = get_option('plugin_lockdown_options', []);
+				$new_input['exempt_users'] = isset($existing['exempt_users']) ? $existing['exempt_users'] : [get_current_user_id()];
+				add_settings_error(
+					'plugin_lockdown_options',
+					'last_exempt_user',
+					__('You cannot remove all exempt users. At least one administrator must remain exempt.', 'plugin-lockdown-wp'),
+					'error'
+				);
+			} else {
+				$new_input['exempt_users'] = $new_exempt;
+			}
+		} else {
+			// Checkboxes not submitted (all unchecked) — keep existing.
+			$existing = get_option('plugin_lockdown_options', []);
+			$new_input['exempt_users'] = isset($existing['exempt_users']) ? $existing['exempt_users'] : [];
 		}
 
 		return $new_input;
@@ -279,5 +315,44 @@ class Plugin_Lockdown_Settings
 		</label>
 		<p class="description" style="font-size: .8rem;"><?php echo __('Only apply lockdown settings on production sites.', 'plugin_lockdown_wp'); ?></p>
 <?php
+	}
+
+	/**
+	 * Exempt users field callback.
+	 * Renders a checkbox list of all administrators on the site.
+	 */
+	public function exempt_users_callback()
+	{
+		$options      = get_option('plugin_lockdown_options', []);
+		$exempt_users = isset($options['exempt_users']) ? array_map('intval', (array) $options['exempt_users']) : [];
+
+		// Get all administrators.
+		$admins = get_users(['role' => 'administrator']);
+
+		if (empty($admins)) {
+			echo '<p>' . esc_html__('No administrators found.', 'plugin-lockdown-wp') . '</p>';
+			return;
+		}
+
+		echo '<fieldset class="plw-exempt-users-fieldset">';
+		foreach ($admins as $admin) {
+			$checked   = in_array($admin->ID, $exempt_users, true) ? 'checked' : '';
+			$you_label = ($admin->ID === get_current_user_id()) ? ' <em>(' . esc_html__('you', 'plugin-lockdown-wp') . ')</em>' : '';
+			printf(
+				'<label style="display:block; margin-bottom:6px;">
+					<input type="checkbox" name="plugin_lockdown_options[exempt_users][]" value="%d" %s />
+					%s (%s)%s
+				</label>',
+				$admin->ID,
+				$checked,
+				esc_html($admin->display_name),
+				esc_html($admin->user_email),
+				$you_label
+			);
+		}
+		echo '</fieldset>';
+		echo '<p class="description" style="font-size: .8rem;">';
+		echo esc_html__('Select which administrators are exempt from lockdown rules. At least one must remain selected. Non-exempt admins will not see Plugin Lockdown settings.', 'plugin-lockdown-wp');
+		echo '</p>';
 	}
 }
