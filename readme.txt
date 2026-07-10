@@ -20,6 +20,7 @@ Keep your WordPress dashboard clean and prevent unauthorized users or clients fr
 = Key Features =
 
 * **Global Lockdown**: Restrict access to the plugins page for specific user roles.
+* **Exempt Users Whitelist**: Designate trusted administrators who bypass all lockdown rules. Only exempt users can see and configure Plugin Lockdown settings.
 * **Restrict Access**: Remove the plugins page for specific user roles.
 * **Restrict Add Plugins**: Remove the ability to add plugins for specific user roles.
 * **Restrict Delete Plugins**: Remove the ability to delete plugins for specific user roles.
@@ -64,13 +65,35 @@ Yes, you can configure the plugin to remove the ability to delete plugins for sp
 
 Absolutely. You have full control over who can activate or deactivate plugins by using the role-based access control.
 
+= What are exempt users? =
+
+Exempt users are administrators who bypass all lockdown rules. When the plugin is first activated, the activating user is automatically added to the exempt list. Only exempt users can see and modify Plugin Lockdown settings. Non-exempt administrators are fully restricted by all enabled lockdown rules.
+
+= What happens if no exempt users are configured? =
+
+If no exempt users are configured (e.g., the plugin was activated via WP-CLI without a user context), all lockdown rules remain inactive and an admin notice is shown prompting any administrator to configure the exempt list.
+
+= How do I recover access if all exempt users are removed or unavailable? =
+
+If all exempt administrators lose access, you can recover using one of these methods:
+
+1. WP-CLI: `wp plugin deactivate plugin-lockdown-wp`
+2. FTP/SFTP: Rename or delete the `plugin-lockdown-wp` folder in `/wp-content/plugins/`
+3. Database: Run `DELETE FROM wp_options WHERE option_name = 'plugin_lockdown_options';` to reset all settings
+
 == Changelog ==
+
+= 1.1.0 =
+* Added Exempt Users Whitelist — designate trusted admins who bypass lockdown rules.
+* Settings page now hidden from non-exempt administrators.
+* Auto-captures activating user as the first exempt admin.
+* Admin notice shown when no exempt users are configured (fail-open safety).
+* Removed DISALLOW_FILE_MODS in favour of granular per-user capability filtering.
+* Fixed plugin self-exemption bugs (bulk actions, cron, REST API).
+* Removed debug output (print_r) from apply_rules.
+* Cleaned up unused variables.
 
 = 1.0.1 =
 * Initial public release with Global Lockdown features.
 * Added "Coming Soon" preview for Advanced Features.
 
-== Upgrade Notice ==
-
-= 1.0.1 =
-Initial release.

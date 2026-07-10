@@ -20,6 +20,7 @@ Keep your WordPress dashboard clean and prevent unauthorized users or clients fr
 ## ✨ Key Features
 
 - **Global Lockdown**: Restrict access to the plugins page for specific user roles.
+- **Exempt Users Whitelist**: Designate trusted administrators who bypass all lockdown rules. Only exempt users can see and configure Plugin Lockdown settings.
 - **Restrict Access**: Remove the plugins page for specific user roles.
 - **Restrict Add Plugins**: Remove the ability to add plugins for specific user roles.
 - **Restrict Delete Plugins**: Remove the ability to delete plugins for specific user roles.
@@ -65,6 +66,22 @@ Yes, you can configure the plugin to remove the ability to delete plugins for sp
 
 Absolutely. You have full control over who can activate or deactivate plugins by using the role-based access control.
 
+### What are exempt users?
+
+Exempt users are administrators who bypass all lockdown rules. When the plugin is first activated, the activating user is automatically added to the exempt list. Only exempt users can see and modify Plugin Lockdown settings. Non-exempt administrators are fully restricted by all enabled lockdown rules.
+
+### What happens if no exempt users are configured?
+
+If no exempt users are configured (e.g., the plugin was activated via WP-CLI without a user context), all lockdown rules remain **inactive** and an admin notice is shown prompting any administrator to configure the exempt list.
+
+### How do I recover access if all exempt users are removed or unavailable?
+
+If all exempt administrators lose access, you can recover using one of these methods:
+
+1. **WP-CLI**: `wp plugin deactivate plugin-lockdown-wp`
+2. **FTP/SFTP**: Rename or delete the `plugin-lockdown-wp` folder in `/wp-content/plugins/`
+3. **Database**: Run `DELETE FROM wp_options WHERE option_name = 'plugin_lockdown_options';` to reset all settings
+
 ## ☕ Support the Development
 
 If you find this plugin useful, consider buying me a coffee to support continued development and the upcoming advanced features!
@@ -77,4 +94,4 @@ This plugin is licensed under the [GPL v2 or later](http://www.gnu.org/licenses/
 
 ---
 
-Developed by [Abiodun Paul Ogunnaike (Abbeymaniak)](https://github.com/abbeymaniak)
+Developed and Tested with ❤️ by [Abiodun Paul Ogunnaike (Abbeymaniak)](https://github.com/abbeymaniak)
