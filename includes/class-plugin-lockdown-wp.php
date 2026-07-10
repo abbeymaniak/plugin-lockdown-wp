@@ -20,8 +20,21 @@ class Plugin_Lockdown_WP
 	// Constructor
 	public function __construct()
 	{
-		$this->options = get_option('plugin_lockdown_options', []);
-		add_action('admin_init', [$this, 'apply_rules']);
+		$defaults = array(
+			'total_lockdown'               => 0,
+			'block_installs'               => 0,
+			'hide_plugins_menu'            => 0,
+			'production_only'              => 0,
+			'prevent_plugins_activation'   => 0,
+			'prevent_plugins_deactivation' => 0,
+			'prevent_plugins_updates'      => 0,
+			'exempt_users'                 => [],
+		);
+		$this->options = wp_parse_args(get_option('plugin_lockdown_options', []), $defaults);
+
+		add_action('init', [$this, 'apply_rules']);
+		add_action('admin_menu', [$this, 'hide_plugins_menu']);
+		add_action('admin_notices', [$this, 'no_exempt_users_notice']);
 	}
 
 
@@ -69,39 +82,60 @@ class Plugin_Lockdown_WP
 	}
 
 	/**
-	 * Exempt Plugin Lockdown itself
+	 * Check if the current user is in the exempt users whitelist.
+	 *
+	 * @return bool
 	 */
-	private function is_exempt_plugin()
+	private function is_exempt_user()
 	{
+		$current_user_id = get_current_user_id();
+		if ($current_user_id === 0) {
+			return false;
+		}
 
-		$plugin = $_REQUEST['plugin'] ?? '';
+		$exempt_users = $this->options['exempt_users'] ?? [];
+		return in_array($current_user_id, array_map('intval', (array) $exempt_users), true);
+	}
 
-		return $plugin === PLUGIN_LOCKDOWN_BASENAME;
+	/**
+	 * Check if any exempt users have been configured.
+	 * When no exempt users exist, lockdown rules are inactive (fail-open safety).
+	 *
+	 * @return bool
+	 */
+	private function has_exempt_users()
+	{
+		$exempt_users = $this->options['exempt_users'] ?? [];
+		return !empty($exempt_users);
 	}
 
 
 	/**
-	 * Lock plugin and theme modifications
+	 * Apply lockdown rules based on settings.
+	 * Exempt users bypass all rules. If no exempt users are configured,
+	 * rules are inactive (fail-open safety).
 	 */
 	public function apply_rules()
 	{
-		echo "apply_rules <br>";
-		print_r($this->options);
+		// Fail-open: if no exempt users are configured, don't apply any rules.
+		if (!$this->has_exempt_users()) {
+			return;
+		}
+
+		// Exempt users bypass all rules.
+		if ($this->is_exempt_user()) {
+			return;
+		}
+
 		// TOTAL LOCKDOWN
 		if ((int) $this->options['total_lockdown'] === 1) {
 			$this->lock_all();
 			$this->block_installs();
-			$this->hide_plugins_menu();
 		}
 
 		// Block installs only
 		if ((int) $this->options['block_installs'] === 1) {
 			$this->block_installs();
-		}
-
-		// Hide plugins menu
-		if ((int) $this->options['hide_plugins_menu'] === 1) {
-			$this->hide_plugins_menu();
 		}
 
 		//prevent plugin activations
@@ -121,13 +155,12 @@ class Plugin_Lockdown_WP
 	}
 
 	/**
-	 * Block install
+	 * Block plugin and theme installations.
 	 */
 	private function block_installs()
 	{
-		// Extra safety: block install capability
 		add_filter('map_meta_cap', function ($caps, $cap) {
-			if (in_array($cap, ['install_plugins', 'update_plugins', 'delete_plugins', 'install_themes', 'update_themes']) && !$this->is_exempt_plugin()) {
+			if (in_array($cap, ['install_plugins', 'update_plugins', 'delete_plugins', 'install_themes', 'update_themes'])) {
 				$caps[] = 'do_not_allow';
 			}
 			return $caps;
@@ -135,12 +168,16 @@ class Plugin_Lockdown_WP
 	}
 
 	/**
-	 * Hide plugins menu
+	 * Hide plugins menu for non-exempt users.
 	 */
-	private function hide_plugins_menu()
+	public function hide_plugins_menu()
 	{
+		// If no exempt users configured or user is exempt, don't hide the menu.
+		if (!$this->has_exempt_users() || $this->is_exempt_user()) {
+			return;
+		}
 
-		if ((int) $this->options['hide_plugins_menu'] === 1) {
+		if ((int) $this->options['hide_plugins_menu'] === 1 || (int) $this->options['total_lockdown'] === 1) {
 			remove_menu_page('plugins.php');
 			remove_submenu_page('plugins.php', 'plugin-install.php');
 		}
@@ -148,16 +185,12 @@ class Plugin_Lockdown_WP
 
 
 	/**
-	 * Disable installs and updates
+	 * Total lockdown — block all plugin/theme capabilities via map_meta_cap.
+	 * DISALLOW_FILE_MODS removed: it is a blunt constant that cannot be scoped
+	 * per-user and has unintended side effects (blocks file editor, etc.).
 	 */
-
 	private function lock_all()
 	{
-		// Disable installs/updates
-		if (!defined('DISALLOW_FILE_MODS') && !$this->is_exempt_plugin()) {
-			define('DISALLOW_FILE_MODS', true);
-		}
-
 		add_filter(
 			'map_meta_cap',
 			[$this, 'total_lockdown_capabilities'],
@@ -167,16 +200,16 @@ class Plugin_Lockdown_WP
 	}
 
 	/**
-	 * Total lockdown capabilities
+	 * Total lockdown capabilities filter callback.
+	 *
+	 * @param array  $caps Required capabilities.
+	 * @param string $cap  Capability being checked.
+	 * @return array
 	 */
 	public function total_lockdown_capabilities(
 		$caps,
 		$cap
 	) {
-
-		if ($this->is_exempt_plugin()) {
-			return $caps;
-		}
 
 		$blocked = [
 
@@ -185,7 +218,9 @@ class Plugin_Lockdown_WP
 			'delete_plugins',
 
 			'activate_plugins',
+			'activate_plugin',
 			'deactivate_plugins',
+			'deactivate_plugin',
 
 			'install_themes',
 			'update_themes',
@@ -201,8 +236,8 @@ class Plugin_Lockdown_WP
 	}
 
 	/**
+	 * Prevent plugins activation for non-exempt users.
 	 *
-	 * Prevent plugins activation
 	 * @return void
 	 */
 	private function prevent_plugins_activation()
@@ -210,40 +245,38 @@ class Plugin_Lockdown_WP
 
 		add_filter(
 			'map_meta_cap',
-			function ($caps, $cap, $user_id, $args) {
+			function ($caps, $cap) {
 
-				$plugins = $_POST['plugins'] ?? '';
-				if ($cap === 'activate_plugins' && !$this->is_exempt_plugin()) {
+				if ($cap === 'activate_plugins' || $cap === 'activate_plugin') {
 					$caps[] = 'do_not_allow';
 				}
 				return $caps;
 			},
 			10,
-			4
+			2
 		);
 	}
 
 
 	/**
+	 * Prevent plugins deactivation for non-exempt users.
 	 *
-	 * Prevent Plugins deactivation
 	 * @return void
 	 */
 	private function prevent_plugins_deactivation()
 	{
 
-		add_filter('map_meta_cap', function ($caps, $cap, $user_id, $args) {
+		add_filter('map_meta_cap', function ($caps, $cap) {
 
-			if ($cap === 'deactivate_plugins' && !$this->is_exempt_plugin()) {
+			if ($cap === 'deactivate_plugins' || $cap === 'deactivate_plugin') {
 				$caps[] = 'do_not_allow';
 			}
 			return $caps;
-		}, 10, 4);
+		}, 10, 2);
 	}
 
 	/**
-	 * Prevent plugin updates
-	 *
+	 * Prevent plugin updates for non-exempt users.
 	 */
 	private function prevent_plugins_updates()
 	{
@@ -252,10 +285,7 @@ class Plugin_Lockdown_WP
 			'map_meta_cap',
 			function ($caps, $cap) {
 
-				if (
-					$cap === 'update_plugins'
-					&& !$this->is_exempt_plugin()
-				) {
+				if ($cap === 'update_plugins') {
 					$caps[] = 'do_not_allow';
 				}
 
@@ -264,5 +294,28 @@ class Plugin_Lockdown_WP
 			10,
 			2
 		);
+	}
+
+	/**
+	 * Display admin notice when no exempt users are configured.
+	 * Shows to all administrators so someone can configure the plugin.
+	 */
+	public function no_exempt_users_notice()
+	{
+		if (!current_user_can('manage_options')) {
+			return;
+		}
+
+		if ($this->has_exempt_users()) {
+			return;
+		}
+
+		$settings_url = esc_url(admin_url('admin.php?page=plugin-lockdown'));
+
+		echo '<div class="notice notice-warning is-dismissible">';
+		echo '<p><strong>' . esc_html__('Plugin Lockdown WP:', 'plugin-lockdown-wp') . '</strong> ';
+		echo esc_html__('No exempt users configured. Lockdown rules are inactive until at least one administrator is added as exempt.', 'plugin-lockdown-wp');
+		echo ' <a href="' . $settings_url . '">' . esc_html__('Configure now →', 'plugin-lockdown-wp') . '</a>';
+		echo '</p></div>';
 	}
 }
