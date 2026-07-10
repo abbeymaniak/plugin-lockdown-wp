@@ -104,6 +104,7 @@ input:checked + label .tab-name {
 	opacity: 0;
 	z-index: 0;
 	transition: 0.5s;
+	width: 100%;
 }
 
 input:checked + label .tab-content {
@@ -137,8 +138,13 @@ input:checked + label .tab-content {
 }
 
 @keyframes plw-float {
-	0%, 100% { transform: translateY(0); }
-	50%       { transform: translateY(-8px); }
+	0%,
+	100% {
+		transform: translateY(0);
+	}
+	50% {
+		transform: translateY(-8px);
+	}
 }
 
 .plw-coming-soon-header h2 {
@@ -172,15 +178,22 @@ input:checked + label .tab-content {
 	border: 1px solid #e0e0e0;
 	border-radius: 10px;
 	padding: 16px 16px 14px;
-	transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		border-color 0.2s ease;
 	overflow: hidden;
 }
 
 .plw-feature-card::before {
-	content: '';
+	content: "";
 	position: absolute;
 	inset: 0;
-	background: linear-gradient(135deg, rgba(34, 113, 177, 0.06) 0%, transparent 60%);
+	background: linear-gradient(
+		135deg,
+		rgba(34, 113, 177, 0.06) 0%,
+		transparent 60%
+	);
 	pointer-events: none;
 }
 
@@ -250,3 +263,36 @@ input:checked + label .tab-content {
 .plw-coming-soon-footer a:hover {
 	text-decoration: underline;
 }
+
+/* ============================================================
+   Exempt Users Fieldset
+   ============================================================ */
+
+.plw-exempt-users-fieldset {
+	background: #f6f7f7;
+	border: 1px solid #e0e0e0;
+	border-radius: 8px;
+	padding: 12px 16px;
+	max-width: 400px;
+}
+
+.plw-exempt-users-fieldset label {
+	display: flex !important;
+	align-items: center;
+	gap: 8px;
+	padding: 6px 0;
+	font-size: 13px;
+	color: #1d2327;
+	border-bottom: 1px solid #f0f0f0;
+}
+
+.plw-exempt-users-fieldset label:last-child {
+	border-bottom: none;
+}
+
+.plw-exempt-users-fieldset em {
+	color: #2271b1;
+	font-style: italic;
+	font-size: 12px;
+}
+
