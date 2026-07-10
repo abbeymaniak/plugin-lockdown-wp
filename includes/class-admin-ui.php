@@ -14,6 +14,16 @@ class Plugin_Lockdown_Admin_UI
 
 	public function menu()
 	{
+		$options         = get_option('plugin_lockdown_options', []);
+		$exempt_users    = isset($options['exempt_users']) ? array_map('intval', (array) $options['exempt_users']) : [];
+		$current_user_id = get_current_user_id();
+
+		// If exempt users are configured, only show menu to exempt users.
+		// If no exempt users yet, show to all admins so someone can configure.
+		if (!empty($exempt_users) && !in_array($current_user_id, $exempt_users, true)) {
+			return;
+		}
+
 		add_menu_page(
 			'Plugin Lockdown',
 			'Plugin Lockdown',
@@ -48,11 +58,5 @@ class Plugin_Lockdown_Admin_UI
 	{
 		$options = get_option('plugin_lockdown_options', []);
 		include PLUGIN_LOCKDOWN_PATH . 'templates/settings-page.php';
-	}
-
-
-	public function plugin_lockdown_settings_page_before_extra_content()
-	{
-		echo '<p>Plugin Lockdown extra content</p>';
 	}
 }
