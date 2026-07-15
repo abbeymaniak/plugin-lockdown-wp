@@ -1,15 +1,15 @@
-# Plugin Lockdown WP
+# Dashboard Extension Lockdown
 
 <div align="center">
-  <img src="assets/image/banner-1544_x_500.png" alt="Plugin Lockdown WP Banner">
+  <img src="assets/image/banner-1544_x_500.png" alt="Dashboard Extension Lockdown Banner">
 </div>
 
-![WordPress Plugin Version](https://img.shields.io/github/v/release/abbeymaniak/plugin-lockdown-wp?label=Version)
+![WordPress Plugin Version](https://img.shields.io/github/v/release/abbeymaniak/dashboard-extension-lockdown?label=Version)
 ![Requires PHP](https://img.shields.io/badge/PHP-8.1+-blue.svg)
 ![Requires WP](https://img.shields.io/badge/WordPress-6.0+-blue.svg)
 ![License](https://img.shields.io/badge/License-GPLv2-blue.svg)
 
-**Plugin Lockdown WP** allows you to control access to plugin features and menus based on user roles, keeping your WordPress dashboard secure and clean.
+**Dashboard Extension Lockdown** allows you to control access to plugin features and menus based on user roles, keeping your WordPress dashboard secure and clean.
 
 ## 🚀 Description
 
@@ -20,7 +20,7 @@ Keep your WordPress dashboard clean and prevent unauthorized users or clients fr
 ## ✨ Key Features
 
 - **Global Lockdown**: Restrict access to the plugins page for specific user roles.
-- **Exempt Users Whitelist**: Designate trusted administrators who bypass all lockdown rules. Only exempt users can see and configure Plugin Lockdown settings.
+- **Exempt Users Whitelist**: Designate trusted administrators who bypass all lockdown rules. Only exempt users can see and configure Dashboard Extension Lockdown settings.
 - **Restrict Access**: Remove the plugins page for specific user roles.
 - **Restrict Add Plugins**: Remove the ability to add plugins for specific user roles.
 - **Restrict Delete Plugins**: Remove the ability to delete plugins for specific user roles.
@@ -44,9 +44,9 @@ Keep your WordPress dashboard clean and prevent unauthorized users or clients fr
 ## 📦 Installation
 
 1. Download the plugin zip file or clone the repository.
-2. Upload the `plugin-lockdown-wp` folder to the `/wp-content/plugins/` directory of your WordPress installation.
+2. Upload the `dashboard-extension-lockdown` folder to the `/wp-content/plugins/` directory of your WordPress installation.
 3. Activate the plugin through the **Plugins** menu in WordPress.
-4. Navigate to **Plugin Lockdown** in the WordPress admin menu to configure your settings.
+4. Navigate to **Dashboard Extension Lockdown** in the WordPress admin menu to configure your settings.
 
 ## ❓ Frequently Asked Questions
 
@@ -68,7 +68,7 @@ Absolutely. You have full control over who can activate or deactivate plugins by
 
 ### What are exempt users?
 
-Exempt users are administrators who bypass all lockdown rules. When the plugin is first activated, the activating user is automatically added to the exempt list. Only exempt users can see and modify Plugin Lockdown settings. Non-exempt administrators are fully restricted by all enabled lockdown rules.
+Exempt users are administrators who bypass all lockdown rules. When the plugin is first activated, the activating user is automatically added to the exempt list. Only exempt users can see and modify Dashboard Extension Lockdown settings. Non-exempt administrators are fully restricted by all enabled lockdown rules.
 
 ### What happens if no exempt users are configured?
 
@@ -78,9 +78,9 @@ If no exempt users are configured (e.g., the plugin was activated via WP-CLI wit
 
 If all exempt administrators lose access, you can recover using one of these methods:
 
-1. **WP-CLI**: `wp plugin deactivate plugin-lockdown-wp`
-2. **FTP/SFTP**: Rename or delete the `plugin-lockdown-wp` folder in `/wp-content/plugins/`
-3. **Database**: Run `DELETE FROM wp_options WHERE option_name = 'plugin_lockdown_options';` to reset all settings
+1. **WP-CLI**: `wp plugin deactivate dashboard-extension-lockdown`
+2. **FTP/SFTP**: Rename or delete the `dashboard-extension-lockdown` folder in `/wp-content/plugins/`
+3. **Database**: Run `DELETE FROM wp_options WHERE option_name = 'dashboard_extension_lockdown_options';` to reset all settings
 
 ## ☕ Support the Development
 

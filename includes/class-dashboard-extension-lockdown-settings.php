@@ -1,9 +1,9 @@
 <?php
 
-namespace Abbeymaniak\PluginLockdownWp;
+namespace Abbeymaniak\DashboardExtensionLockdown;
 
 
-class Plugin_Lockdown_Settings
+class Dashboard_Extension_Lockdown_Settings
 {
 
 	public function __construct()
@@ -20,8 +20,8 @@ class Plugin_Lockdown_Settings
 	{
 
 		register_setting(
-			'plugin_lockdown_group',
-			'plugin_lockdown_options',
+			'dashboard_extension_lockdown_group',
+			'dashboard_extension_lockdown_options',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array($this, 'sanitize_options'),
@@ -39,26 +39,26 @@ class Plugin_Lockdown_Settings
 		);
 
 		add_settings_section(
-			'plugin_lockdown_general_section',
+			'dashboard_extension_lockdown_general_section',
 			'General Settings',
 			array($this, 'general_section_callback'),
-			'plugin_lockdown' //page slug
+			'dashboard_extension_lockdown' //page slug
 		);
 
 		add_settings_field(
 			'total_lockdown',
 			'Total Lockdown',
 			array($this, 'total_lockdown_callback'),
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 		add_settings_field(
 			'block_installs',
 			'Block Installs',
 			array($this, 'block_installs_callback'),
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 
@@ -66,48 +66,48 @@ class Plugin_Lockdown_Settings
 			'hide_plugins_menu',
 			'Hide Plugins Menu',
 			array($this, 'hide_plugins_menu_callback'),
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 		add_settings_field(
 			'prevent_plugins_activation',
 			'Restrict Plugins Activation',
 			[$this, 'prevent_plugins_activation_callback'],
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 		add_settings_field(
 			'prevent_plugins_deactivation',
 			'Restrict Plugins Deactivation',
 			[$this, 'prevent_plugins_deactivation_callback'],
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 		add_settings_field(
 			'prevent_plugins_updates',
 			'Restrict Plugins Updates',
 			[$this, 'prevent_plugins_updates_callback'],
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 		add_settings_field(
 			'production_only',
 			'Production Only',
 			array($this, 'production_only_callback'),
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 
 		add_settings_field(
 			'exempt_users',
 			'Exempt Users',
 			[$this, 'exempt_users_callback'],
-			'plugin_lockdown',
-			'plugin_lockdown_general_section'
+			'dashboard_extension_lockdown',
+			'dashboard_extension_lockdown_general_section'
 		);
 	}
 
@@ -170,12 +170,12 @@ class Plugin_Lockdown_Settings
 
 			if (empty($new_exempt)) {
 				// Cannot remove the last user — keep current value.
-				$existing = get_option('plugin_lockdown_options', []);
+				$existing = get_option('dashboard_extension_lockdown_options', []);
 				$new_input['exempt_users'] = isset($existing['exempt_users']) ? $existing['exempt_users'] : [get_current_user_id()];
 				add_settings_error(
-					'plugin_lockdown_options',
+					'dashboard_extension_lockdown_options',
 					'last_exempt_user',
-					__('You cannot remove all exempt users. At least one administrator must remain exempt.', 'plugin-lockdown-wp'),
+					__('You cannot remove all exempt users. At least one administrator must remain exempt.', 'dashboard-extension-lockdown'),
 					'error'
 				);
 			} else {
@@ -183,7 +183,7 @@ class Plugin_Lockdown_Settings
 			}
 		} else {
 			// Checkboxes not submitted (all unchecked) — keep existing.
-			$existing = get_option('plugin_lockdown_options', []);
+			$existing = get_option('dashboard_extension_lockdown_options', []);
 			$new_input['exempt_users'] = isset($existing['exempt_users']) ? $existing['exempt_users'] : [];
 		}
 
@@ -195,7 +195,7 @@ class Plugin_Lockdown_Settings
 	 */
 	public function general_section_callback()
 	{
-		echo __('<p> Configure plugin lockdown behavior and restrictions.</p>', 'plugin_lockdown_wp');
+		echo '<p>' . esc_html__('Configure dashboard extension lockdown behavior and restrictions.', 'dashboard-extension-lockdown') . '</p>';
 	}
 
 	/**
@@ -204,14 +204,14 @@ class Plugin_Lockdown_Settings
 
 	public function block_installs_callback()
 	{
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$block_installs_checked = isset($options['block_installs']) ? $options['block_installs'] : 0;
 ?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[block_installs]" value="1" <?php checked($block_installs_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Block Installs', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[block_installs]" value="1" <?php checked($block_installs_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Block Installs', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin installs for users.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin installs for users.', 'dashboard-extension-lockdown'); ?></p>
 	<?php
 	}
 	/**
@@ -219,15 +219,15 @@ class Plugin_Lockdown_Settings
 	 */
 	public function total_lockdown_callback()
 	{
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$total_lockdown_checked = isset($options['total_lockdown']) ? $options['total_lockdown'] : 0;
 
 	?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[total_lockdown]" value="1" <?php checked($total_lockdown_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Enable total lockdown', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[total_lockdown]" value="1" <?php checked($total_lockdown_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Enable total lockdown', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin/theme installs, updates, and deletions for all users. Replaces all other settings when enabled.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin/theme installs, updates, and deletions for all users. Replaces all other settings when enabled.', 'dashboard-extension-lockdown'); ?></p>
 	<?php
 	}
 
@@ -236,14 +236,14 @@ class Plugin_Lockdown_Settings
 	 */
 	public function hide_plugins_menu_callback()
 	{
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$hide_plugins_menu_checked = isset($options['hide_plugins_menu']) ? $options['hide_plugins_menu'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[hide_plugins_menu]" value="1" <?php checked($hide_plugins_menu_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Hide Plugins Menu', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[hide_plugins_menu]" value="1" <?php checked($hide_plugins_menu_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Hide Plugins Menu', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Completely hide the plugins menu for all users.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely hide the plugins menu for all users.', 'dashboard-extension-lockdown'); ?></p>
 	<?php
 	}
 
@@ -254,14 +254,14 @@ class Plugin_Lockdown_Settings
 	public function prevent_plugins_activation_callback()
 	{
 
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$prevent_plugins_activation_checked = isset($options['prevent_plugins_activation']) ? $options['prevent_plugins_activation'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_activation]" value="1" <?php checked($prevent_plugins_activation_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Restrict Plugins Activation', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[prevent_plugins_activation]" value="1" <?php checked($prevent_plugins_activation_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Activation', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin activations for users.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin activations for users.', 'dashboard-extension-lockdown'); ?></p>
 	<?php
 	}
 
@@ -272,14 +272,14 @@ class Plugin_Lockdown_Settings
 	public function prevent_plugins_deactivation_callback()
 	{
 
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$prevent_plugins_deactivation_checked = isset($options['prevent_plugins_deactivation']) ? $options['prevent_plugins_deactivation'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_deactivation]" value="1" <?php checked($prevent_plugins_deactivation_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Restrict Plugins Deactivation', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[prevent_plugins_deactivation]" value="1" <?php checked($prevent_plugins_deactivation_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Deactivation', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin deactivations for users.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin deactivations for users.', 'dashboard-extension-lockdown'); ?></p>
 	<?php
 	}
 
@@ -290,14 +290,14 @@ class Plugin_Lockdown_Settings
 	public function prevent_plugins_updates_callback()
 	{
 
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$prevent_plugins_updates_checked = isset($options['prevent_plugins_updates']) ? $options['prevent_plugins_updates'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[prevent_plugins_updates]" value="1" <?php checked($prevent_plugins_updates_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Restrict Plugins Updates', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[prevent_plugins_updates]" value="1" <?php checked($prevent_plugins_updates_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Updates', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Completely disable all plugin updates for users.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin updates for users.', 'dashboard-extension-lockdown'); ?></p>
 	<?php
 	}
 
@@ -306,14 +306,14 @@ class Plugin_Lockdown_Settings
 	 */
 	public function production_only_callback()
 	{
-		$options = get_option('plugin_lockdown_options');
+		$options = get_option('dashboard_extension_lockdown_options');
 		$production_only_checked = isset($options['production_only']) ? $options['production_only'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="plugin_lockdown_options[production_only]" value="1" <?php checked($production_only_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo __('Production Only', 'plugin_lockdown_wp'); ?></span>
+			<input type="checkbox" name="dashboard_extension_lockdown_options[production_only]" value="1" <?php checked($production_only_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Production Only', 'dashboard-extension-lockdown'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo __('Only apply lockdown settings on production sites.', 'plugin_lockdown_wp'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Only apply lockdown settings on production sites.', 'dashboard-extension-lockdown'); ?></p>
 <?php
 	}
 
@@ -323,36 +323,36 @@ class Plugin_Lockdown_Settings
 	 */
 	public function exempt_users_callback()
 	{
-		$options      = get_option('plugin_lockdown_options', []);
+		$options      = get_option('dashboard_extension_lockdown_options', []);
 		$exempt_users = isset($options['exempt_users']) ? array_map('intval', (array) $options['exempt_users']) : [];
 
 		// Get all administrators.
 		$admins = get_users(['role' => 'administrator']);
 
 		if (empty($admins)) {
-			echo '<p>' . esc_html__('No administrators found.', 'plugin-lockdown-wp') . '</p>';
+			echo '<p>' . esc_html__('No administrators found.', 'dashboard-extension-lockdown') . '</p>';
 			return;
 		}
 
 		echo '<fieldset class="plw-exempt-users-fieldset">';
 		foreach ($admins as $admin) {
 			$checked   = in_array($admin->ID, $exempt_users, true) ? 'checked' : '';
-			$you_label = ($admin->ID === get_current_user_id()) ? ' <em>(' . esc_html__('you', 'plugin-lockdown-wp') . ')</em>' : '';
+			$you_label = ($admin->ID === get_current_user_id()) ? ' <em>(' . esc_html__('you', 'dashboard-extension-lockdown') . ')</em>' : '';
 			printf(
 				'<label style="display:block; margin-bottom:6px;">
-					<input type="checkbox" name="plugin_lockdown_options[exempt_users][]" value="%d" %s />
+					<input type="checkbox" name="dashboard_extension_lockdown_options[exempt_users][]" value="%d" %s />
 					%s (%s)%s
 				</label>',
-				$admin->ID,
-				$checked,
+				(int) $admin->ID,
+				esc_attr($checked),
 				esc_html($admin->display_name),
 				esc_html($admin->user_email),
-				$you_label
+				wp_kses_post($you_label)
 			);
 		}
 		echo '</fieldset>';
 		echo '<p class="description" style="font-size: .8rem;">';
-		echo esc_html__('Select which administrators are exempt from lockdown rules. At least one must remain selected. Non-exempt admins will not see Plugin Lockdown settings.', 'plugin-lockdown-wp');
+		echo esc_html__('Select which administrators are exempt from lockdown rules. At least one must remain selected. Non-exempt admins will not see Dashboard Extension Lockdown settings.', 'dashboard-extension-lockdown');
 		echo '</p>';
 	}
 }

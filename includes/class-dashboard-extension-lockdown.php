@@ -1,18 +1,18 @@
 <?php
 
-namespace Abbeymaniak\PluginLockdownWp;
+namespace Abbeymaniak\DashboardExtensionLockdown;
 
 
 /**
- * This is the Plugin Lockdown WP class.
+ * This is the Dashboard Extension Lockdown class.
  *
  * @category Plugin
- * @package  Plugin_Lockdown_WP
+ * @package  Dashboard_Extension_Lockdown
  * @author   Abiodun Paul Ogunnaike <primastech101@gmail.com>
  * @license  http://www.gnu.org/licenses/gpl-2.0.txt GPLv2 or later
- * @link     https://github.com/abbeymaniak/plugin-lockdown-wp
+ * @link     https://github.com/abbeymaniak/dashboard-extension-lockdown
  */
-class Plugin_Lockdown_WP
+class Dashboard_Extension_Lockdown
 {
 
 
@@ -30,7 +30,7 @@ class Plugin_Lockdown_WP
 			'prevent_plugins_updates'      => 0,
 			'exempt_users'                 => [],
 		);
-		$this->options = wp_parse_args(get_option('plugin_lockdown_options', []), $defaults);
+		$this->options = wp_parse_args(get_option('dashboard_extension_lockdown_options', []), $defaults);
 
 		add_action('init', [$this, 'apply_rules']);
 		add_action('admin_menu', [$this, 'hide_plugins_menu']);
@@ -68,7 +68,7 @@ class Plugin_Lockdown_WP
 		}
 
 		// Fallback: check domain
-		$host = $_SERVER['HTTP_HOST'] ?? '';
+		$host = isset($_SERVER['HTTP_HOST']) ? sanitize_text_field(wp_unslash($_SERVER['HTTP_HOST'])) : '';
 
 		if (strpos($host, 'localhost') !== false || strpos($host, '.test') !== false) {
 			return 'local';
@@ -310,12 +310,12 @@ class Plugin_Lockdown_WP
 			return;
 		}
 
-		$settings_url = esc_url(admin_url('admin.php?page=plugin-lockdown'));
+		$settings_url = admin_url('admin.php?page=dashboard-extension-lockdown');
 
 		echo '<div class="notice notice-warning is-dismissible">';
-		echo '<p><strong>' . esc_html__('Plugin Lockdown WP:', 'plugin-lockdown-wp') . '</strong> ';
-		echo esc_html__('No exempt users configured. Lockdown rules are inactive until at least one administrator is added as exempt.', 'plugin-lockdown-wp');
-		echo ' <a href="' . $settings_url . '">' . esc_html__('Configure now →', 'plugin-lockdown-wp') . '</a>';
+		echo '<p><strong>' . esc_html__('Dashboard Extension Lockdown:', 'dashboard-extension-lockdown') . '</strong> ';
+		echo esc_html__('No exempt users configured. Lockdown rules are inactive until at least one administrator is added as exempt.', 'dashboard-extension-lockdown');
+		echo ' <a href="' . esc_url($settings_url) . '">' . esc_html__('Configure now →', 'dashboard-extension-lockdown') . '</a>';
 		echo '</p></div>';
 	}
 }
