@@ -1,18 +1,18 @@
 {
-  "name": "abbeymaniak/dashboard-extension-lockdown",
-  "description": "Dashboard Extension Lockdown allows you to control access to plugin features based on user roles.",
+  "name": "abbeymaniak/admin-plugin-access-control",
+  "description": "Admin Plugin Access Control allows you to control access to plugin features based on user roles.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
       "name": "Abiodun Paul Ogunnaike",
-      "email": "ayo_ogunnaike@yahoo.com",
+      "email": "paul@celebrateme.io",
       "homepage": "https://digital.celebrateme.io"
     }
   ],
   "autoload": {
     "psr-4": {
-      "Abbeymaniak\\DashboardExtensionLockdown\\": "includes/"
+      "Abbeymaniak\\AdminPluginAccessControl\\": "includes/"
     }
   },
   "require-dev": {
