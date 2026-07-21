@@ -1,8 +1,8 @@
 <?php
 
-namespace Abbeymaniak\AdminPluginAccessControl;
+namespace Abbeymaniak\AdminExtensionAccessControl;
 
-class Admin_Plugin_Access_Control_Admin_UI
+class Admin_Extension_Access_Control_Admin_UI
 {
 
 	public function __construct()
@@ -14,7 +14,7 @@ class Admin_Plugin_Access_Control_Admin_UI
 
 	public function menu()
 	{
-		$options         = get_option('admin_plugin_access_control_options', []);
+		$options         = get_option('admin_extension_access_control_options', []);
 		$exempt_users    = isset($options['exempt_users']) ? array_map('intval', (array) $options['exempt_users']) : [];
 		$current_user_id = get_current_user_id();
 
@@ -25,10 +25,10 @@ class Admin_Plugin_Access_Control_Admin_UI
 		}
 
 		add_menu_page(
-			'Admin Plugin Access Control',
-			'Admin Plugin Access Control',
+			'Admin Extension Access Control',
+			'Admin Extension Access Control',
 			'manage_options',
-			'admin-plugin-access-control',
+			'admin-extension-access-control',
 			[$this, 'render'],
 			'dashicons-shield-alt'
 		);
@@ -37,18 +37,18 @@ class Admin_Plugin_Access_Control_Admin_UI
 	public function assets()
 	{
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if (isset($_GET['page']) && $_GET['page'] === 'admin-plugin-access-control') {
+		if (isset($_GET['page']) && $_GET['page'] === 'admin-extension-access-control') {
 
 			wp_enqueue_script(
-				'admin-plugin-access-control-admin',
-				ADMIN_PLUGIN_ACCESS_CONTROL_JS,
+				'admin-extension-access-control-admin',
+				ADMIN_EXTENSION_ACCESS_CONTROL_JS,
 				array('jquery'),
 				'1.0.0',
 				true
 			);
 			wp_enqueue_style(
-				'admin-plugin-access-control-admin',
-				ADMIN_PLUGIN_ACCESS_CONTROL_CSS,
+				'admin-extension-access-control-admin',
+				ADMIN_EXTENSION_ACCESS_CONTROL_CSS,
 				array(),
 				"1.0.0"
 			);
@@ -57,7 +57,7 @@ class Admin_Plugin_Access_Control_Admin_UI
 
 	public function render()
 	{
-		$options = get_option('admin_plugin_access_control_options', []);
-		include ADMIN_PLUGIN_ACCESS_CONTROL_PATH . 'templates/settings-page.php';
+		$options = get_option('admin_extension_access_control_options', []);
+		include ADMIN_EXTENSION_ACCESS_CONTROL_PATH . 'templates/settings-page.php';
 	}
 }

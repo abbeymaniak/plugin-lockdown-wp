@@ -1,6 +1,6 @@
 {
-  "name": "abbeymaniak/admin-plugin-access-control",
-  "description": "Admin Plugin Access Control allows you to control access to plugin features based on user roles.",
+  "name": "abbeymaniak/admin-extension-access-control",
+  "description": "Admin Extension Access Control allows you to control access to plugin features based on user roles.",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "authors": [
@@ -12,7 +12,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Abbeymaniak\\AdminPluginAccessControl\\": "includes/"
+      "Abbeymaniak\\AdminExtensionAccessControl\\": "includes/"
     }
   },
   "require-dev": {

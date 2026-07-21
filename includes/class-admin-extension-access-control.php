@@ -1,18 +1,18 @@
 <?php
 
-namespace Abbeymaniak\AdminPluginAccessControl;
+namespace Abbeymaniak\AdminExtensionAccessControl;
 
 
 /**
- * This is the Admin Plugin Access Control class.
+ * This is the Admin Extension Access Control class.
  *
  * @category Plugin
- * @package  Admin_Plugin_Access_Control
+ * @package  Admin_Extension_Access_Control
  * @author   Abiodun Paul Ogunnaike <primastech101@gmail.com>
  * @license  http://www.gnu.org/licenses/gpl-2.0.txt GPLv2 or later
- * @link     https://github.com/abbeymaniak/admin-plugin-access-control
+ * @link     https://github.com/abbeymaniak/admin-extension-access-control
  */
-class Admin_Plugin_Access_Control
+class Admin_Extension_Access_Control
 {
 
 
@@ -30,7 +30,7 @@ class Admin_Plugin_Access_Control
 			'prevent_plugins_updates'      => 0,
 			'exempt_users'                 => [],
 		);
-		$this->options = wp_parse_args(get_option('admin_plugin_access_control_options', []), $defaults);
+		$this->options = wp_parse_args(get_option('admin_extension_access_control_options', []), $defaults);
 
 		add_action('init', [$this, 'apply_rules']);
 		add_action('admin_menu', [$this, 'hide_plugins_menu']);
@@ -310,12 +310,12 @@ class Admin_Plugin_Access_Control
 			return;
 		}
 
-		$settings_url = admin_url('admin.php?page=admin-plugin-access-control');
+		$settings_url = admin_url('admin.php?page=admin-extension-access-control');
 
 		echo '<div class="notice notice-warning is-dismissible">';
-		echo '<p><strong>' . esc_html__('Admin Plugin Access Control:', 'admin-plugin-access-control') . '</strong> ';
-		echo esc_html__('No exempt users configured. Lockdown rules are inactive until at least one administrator is added as exempt.', 'admin-plugin-access-control');
-		echo ' <a href="' . esc_url($settings_url) . '">' . esc_html__('Configure now →', 'admin-plugin-access-control') . '</a>';
+		echo '<p><strong>' . esc_html__('Admin Extension Access Control:', 'admin-extension-access-control') . '</strong> ';
+		echo esc_html__('No exempt users configured. Lockdown rules are inactive until at least one administrator is added as exempt.', 'admin-extension-access-control');
+		echo ' <a href="' . esc_url($settings_url) . '">' . esc_html__('Configure now →', 'admin-extension-access-control') . '</a>';
 		echo '</p></div>';
 	}
 }

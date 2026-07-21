@@ -1,9 +1,9 @@
 <?php
 
-namespace Abbeymaniak\AdminPluginAccessControl;
+namespace Abbeymaniak\AdminExtensionAccessControl;
 
 
-class Admin_Plugin_Access_Control_Settings
+class Admin_Extension_Access_Control_Settings
 {
 
 	public function __construct()
@@ -20,8 +20,8 @@ class Admin_Plugin_Access_Control_Settings
 	{
 
 		register_setting(
-			'admin_plugin_access_control_group',
-			'admin_plugin_access_control_options',
+			'admin_extension_access_control_group',
+			'admin_extension_access_control_options',
 			array(
 				'type'              => 'array',
 				'sanitize_callback' => array($this, 'sanitize_options'),
@@ -39,26 +39,26 @@ class Admin_Plugin_Access_Control_Settings
 		);
 
 		add_settings_section(
-			'admin_plugin_access_control_general_section',
+			'admin_extension_access_control_general_section',
 			'General Settings',
 			array($this, 'general_section_callback'),
-			'admin_plugin_access_control' //page slug
+			'admin_extension_access_control' //page slug
 		);
 
 		add_settings_field(
 			'total_lockdown',
 			'Total Lockdown',
 			array($this, 'total_lockdown_callback'),
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 		add_settings_field(
 			'block_installs',
 			'Block Installs',
 			array($this, 'block_installs_callback'),
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 
@@ -66,48 +66,48 @@ class Admin_Plugin_Access_Control_Settings
 			'hide_plugins_menu',
 			'Hide Plugins Menu',
 			array($this, 'hide_plugins_menu_callback'),
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 		add_settings_field(
 			'prevent_plugins_activation',
 			'Restrict Plugins Activation',
 			[$this, 'prevent_plugins_activation_callback'],
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 		add_settings_field(
 			'prevent_plugins_deactivation',
 			'Restrict Plugins Deactivation',
 			[$this, 'prevent_plugins_deactivation_callback'],
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 		add_settings_field(
 			'prevent_plugins_updates',
 			'Restrict Plugins Updates',
 			[$this, 'prevent_plugins_updates_callback'],
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 		add_settings_field(
 			'production_only',
 			'Production Only',
 			array($this, 'production_only_callback'),
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 
 		add_settings_field(
 			'exempt_users',
 			'Exempt Users',
 			[$this, 'exempt_users_callback'],
-			'admin_plugin_access_control',
-			'admin_plugin_access_control_general_section'
+			'admin_extension_access_control',
+			'admin_extension_access_control_general_section'
 		);
 	}
 
@@ -170,12 +170,12 @@ class Admin_Plugin_Access_Control_Settings
 
 			if (empty($new_exempt)) {
 				// Cannot remove the last user — keep current value.
-				$existing = get_option('admin_plugin_access_control_options', []);
+				$existing = get_option('admin_extension_access_control_options', []);
 				$new_input['exempt_users'] = isset($existing['exempt_users']) ? $existing['exempt_users'] : [get_current_user_id()];
 				add_settings_error(
-					'admin_plugin_access_control_options',
+					'admin_extension_access_control_options',
 					'last_exempt_user',
-					__('You cannot remove all exempt users. At least one administrator must remain exempt.', 'admin-plugin-access-control'),
+					__('You cannot remove all exempt users. At least one administrator must remain exempt.', 'admin-extension-access-control'),
 					'error'
 				);
 			} else {
@@ -183,7 +183,7 @@ class Admin_Plugin_Access_Control_Settings
 			}
 		} else {
 			// Checkboxes not submitted (all unchecked) — keep existing.
-			$existing = get_option('admin_plugin_access_control_options', []);
+			$existing = get_option('admin_extension_access_control_options', []);
 			$new_input['exempt_users'] = isset($existing['exempt_users']) ? $existing['exempt_users'] : [];
 		}
 
@@ -195,7 +195,7 @@ class Admin_Plugin_Access_Control_Settings
 	 */
 	public function general_section_callback()
 	{
-		echo '<p>' . esc_html__('Configure dashboard extension lockdown behavior and restrictions.', 'admin-plugin-access-control') . '</p>';
+		echo '<p>' . esc_html__('Configure dashboard extension lockdown behavior and restrictions.', 'admin-extension-access-control') . '</p>';
 	}
 
 	/**
@@ -204,14 +204,14 @@ class Admin_Plugin_Access_Control_Settings
 
 	public function block_installs_callback()
 	{
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$block_installs_checked = isset($options['block_installs']) ? $options['block_installs'] : 0;
 ?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[block_installs]" value="1" <?php checked($block_installs_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Block Installs', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[block_installs]" value="1" <?php checked($block_installs_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Block Installs', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin installs for users.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin installs for users.', 'admin-extension-access-control'); ?></p>
 	<?php
 	}
 	/**
@@ -219,15 +219,15 @@ class Admin_Plugin_Access_Control_Settings
 	 */
 	public function total_lockdown_callback()
 	{
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$total_lockdown_checked = isset($options['total_lockdown']) ? $options['total_lockdown'] : 0;
 
 	?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[total_lockdown]" value="1" <?php checked($total_lockdown_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Enable total lockdown', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[total_lockdown]" value="1" <?php checked($total_lockdown_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Enable total lockdown', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin/theme installs, updates, and deletions for all users. Replaces all other settings when enabled.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin/theme installs, updates, and deletions for all users. Replaces all other settings when enabled.', 'admin-extension-access-control'); ?></p>
 	<?php
 	}
 
@@ -236,14 +236,14 @@ class Admin_Plugin_Access_Control_Settings
 	 */
 	public function hide_plugins_menu_callback()
 	{
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$hide_plugins_menu_checked = isset($options['hide_plugins_menu']) ? $options['hide_plugins_menu'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[hide_plugins_menu]" value="1" <?php checked($hide_plugins_menu_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Hide Plugins Menu', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[hide_plugins_menu]" value="1" <?php checked($hide_plugins_menu_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Hide Plugins Menu', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely hide the plugins menu for all users.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely hide the plugins menu for all users.', 'admin-extension-access-control'); ?></p>
 	<?php
 	}
 
@@ -254,14 +254,14 @@ class Admin_Plugin_Access_Control_Settings
 	public function prevent_plugins_activation_callback()
 	{
 
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$prevent_plugins_activation_checked = isset($options['prevent_plugins_activation']) ? $options['prevent_plugins_activation'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[prevent_plugins_activation]" value="1" <?php checked($prevent_plugins_activation_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Activation', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[prevent_plugins_activation]" value="1" <?php checked($prevent_plugins_activation_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Activation', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin activations for users.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin activations for users.', 'admin-extension-access-control'); ?></p>
 	<?php
 	}
 
@@ -272,14 +272,14 @@ class Admin_Plugin_Access_Control_Settings
 	public function prevent_plugins_deactivation_callback()
 	{
 
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$prevent_plugins_deactivation_checked = isset($options['prevent_plugins_deactivation']) ? $options['prevent_plugins_deactivation'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[prevent_plugins_deactivation]" value="1" <?php checked($prevent_plugins_deactivation_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Deactivation', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[prevent_plugins_deactivation]" value="1" <?php checked($prevent_plugins_deactivation_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Deactivation', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin deactivations for users.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin deactivations for users.', 'admin-extension-access-control'); ?></p>
 	<?php
 	}
 
@@ -290,14 +290,14 @@ class Admin_Plugin_Access_Control_Settings
 	public function prevent_plugins_updates_callback()
 	{
 
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$prevent_plugins_updates_checked = isset($options['prevent_plugins_updates']) ? $options['prevent_plugins_updates'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[prevent_plugins_updates]" value="1" <?php checked($prevent_plugins_updates_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Updates', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[prevent_plugins_updates]" value="1" <?php checked($prevent_plugins_updates_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Restrict Plugins Updates', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin updates for users.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Completely disable all plugin updates for users.', 'admin-extension-access-control'); ?></p>
 	<?php
 	}
 
@@ -306,14 +306,14 @@ class Admin_Plugin_Access_Control_Settings
 	 */
 	public function production_only_callback()
 	{
-		$options = get_option('admin_plugin_access_control_options');
+		$options = get_option('admin_extension_access_control_options');
 		$production_only_checked = isset($options['production_only']) ? $options['production_only'] : 0;
 	?>
 		<label>
-			<input type="checkbox" name="admin_plugin_access_control_options[production_only]" value="1" <?php checked($production_only_checked, 1); ?> />
-			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Production Only', 'admin-plugin-access-control'); ?></span>
+			<input type="checkbox" name="admin_extension_access_control_options[production_only]" value="1" <?php checked($production_only_checked, 1); ?> />
+			<span style=" color: #d63638; font-weight: bold;"><?php echo esc_html__('Production Only', 'admin-extension-access-control'); ?></span>
 		</label>
-		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Only apply lockdown settings on production sites.', 'admin-plugin-access-control'); ?></p>
+		<p class="description" style="font-size: .8rem;"><?php echo esc_html__('Only apply lockdown settings on production sites.', 'admin-extension-access-control'); ?></p>
 <?php
 	}
 
@@ -323,24 +323,24 @@ class Admin_Plugin_Access_Control_Settings
 	 */
 	public function exempt_users_callback()
 	{
-		$options      = get_option('admin_plugin_access_control_options', []);
+		$options      = get_option('admin_extension_access_control_options', []);
 		$exempt_users = isset($options['exempt_users']) ? array_map('intval', (array) $options['exempt_users']) : [];
 
 		// Get all administrators.
 		$admins = get_users(['role' => 'administrator']);
 
 		if (empty($admins)) {
-			echo '<p>' . esc_html__('No administrators found.', 'admin-plugin-access-control') . '</p>';
+			echo '<p>' . esc_html__('No administrators found.', 'admin-extension-access-control') . '</p>';
 			return;
 		}
 
 		echo '<fieldset class="plw-exempt-users-fieldset">';
 		foreach ($admins as $admin) {
 			$checked   = in_array($admin->ID, $exempt_users, true) ? 'checked' : '';
-			$you_label = ($admin->ID === get_current_user_id()) ? ' <em>(' . esc_html__('you', 'admin-plugin-access-control') . ')</em>' : '';
+			$you_label = ($admin->ID === get_current_user_id()) ? ' <em>(' . esc_html__('you', 'admin-extension-access-control') . ')</em>' : '';
 			printf(
 				'<label style="display:block; margin-bottom:6px;">
-					<input type="checkbox" name="admin_plugin_access_control_options[exempt_users][]" value="%d" %s />
+					<input type="checkbox" name="admin_extension_access_control_options[exempt_users][]" value="%d" %s />
 					%s (%s)%s
 				</label>',
 				(int) $admin->ID,
@@ -352,7 +352,7 @@ class Admin_Plugin_Access_Control_Settings
 		}
 		echo '</fieldset>';
 		echo '<p class="description" style="font-size: .8rem;">';
-		echo esc_html__('Select which administrators are exempt from lockdown rules. At least one must remain selected. Non-exempt admins will not see Admin Plugin Access Control settings.', 'admin-plugin-access-control');
+		echo esc_html__('Select which administrators are exempt from lockdown rules. At least one must remain selected. Non-exempt admins will not see Admin Extension Access Control settings.', 'admin-extension-access-control');
 		echo '</p>';
 	}
 }
